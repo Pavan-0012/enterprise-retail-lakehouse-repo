@@ -24,3 +24,5 @@ data/silver/
 data/gold/
 
 .ipynb_checkpoints/
+
+*.zip
