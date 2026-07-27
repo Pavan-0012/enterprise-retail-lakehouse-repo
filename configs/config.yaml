@@ -1,0 +1,20 @@
+project:
+  name: Enterprise Retail Lakehouse
+  version: 1.0.0
+
+spark:
+  app_name: EnterpriseRetailLakehouse
+  master: local[*]
+
+paths:
+  raw: data/raw
+  bronze: data/bronze
+  silver: data/silver
+  gold: data/gold
+
+storage:
+  format: parquet
+  compression: snappy
+
+logging:
+  level: INFO
