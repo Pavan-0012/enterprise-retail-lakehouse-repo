@@ -1,0 +1,11 @@
+[project]
+name = "enterprise-retail-lakehouse"
+version = "0.1.0"
+description = "Production-grade Data Engineering Lakehouse"
+requires-python = ">=3.11"
+
+[tool.black]
+line-length = 88
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
