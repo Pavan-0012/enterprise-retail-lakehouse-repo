@@ -3,9 +3,7 @@ version: "3.9"
 services:
 
   minio:
-
     image: minio/minio
-
     container_name: enterprise-minio
 
     ports:
@@ -21,6 +19,25 @@ services:
     volumes:
       - minio_data:/data
 
+  postgres:
+    image: postgres:16
+    container_name: retail-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: retail
+      POSTGRES_PASSWORD: retail123
+      POSTGRES_DB: retail_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
 volumes:
 
   minio_data:
+
+  postgres_data:
