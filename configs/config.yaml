@@ -11,6 +11,12 @@ minio:
   secret_key: password123
   secure: false
 
+kaggle:
+  dataset: olistbr/brazilian-ecommerce
+
+dataset:
+  name: olist
+
 paths:
   raw: data/raw
   temp: data/temp
