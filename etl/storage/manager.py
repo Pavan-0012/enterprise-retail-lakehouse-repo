@@ -1,26 +1,30 @@
 from pathlib import Path
 
 from etl.storage.client import MinIOClient
-from etl.common.config import Config
-from etl.common.constants import CONFIG_PATH
-
-
-config = Config(CONFIG_PATH)
 
 
 class StorageManager:
 
-    def __init__(self):
+    def __init__(self, bucket):
 
-        self.client = MinIOClient().get_client()
-        self.bucket = config.get("bucket", "name")
+        self.bucket = bucket
 
-    def upload_file(self, local_file, object_name):
+        self.client = MinIOClient.get_client()
+
+    def upload(self, file_path, object_name):
 
         self.client.fput_object(
             self.bucket,
             object_name,
-            local_file
+            str(file_path)
+        )
+
+    def download(self, object_name, destination):
+
+        self.client.fget_object(
+            self.bucket,
+            object_name,
+            destination
         )
 
     def list_objects(self):
@@ -30,6 +34,24 @@ class StorageManager:
             recursive=True
         )
 
-    def bucket_exists(self):
+    def exists(self):
 
-        return self.client.bucket_exists(self.bucket)
+        return self.client.bucket_exists(
+            self.bucket
+        )
+
+    def delete(self, object_name):
+
+        self.client.remove_object(
+            self.bucket,
+            object_name
+        )
+
+    def object_exists(self, object_name):
+
+        objects = self.client.list_objects(
+            self.bucket,
+            prefix=object_name
+        )
+
+        return any(True for _ in objects)
