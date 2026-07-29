@@ -2,24 +2,12 @@ project:
   name: enterprise-retail-lakehouse
   environment: local
 
-bucket:
-  name: enterprise-retail-lakehouse
-
-minio:
-  endpoint: localhost:9000
-  access_key: admin
-  secret_key: password123
-  secure: false
+dataset:
+  name: olist
 
 kaggle:
   dataset: olistbr/brazilian-ecommerce
 
-dataset:
-  name: olist
-
 paths:
   raw: data/raw
   temp: data/temp
-
-logging:
-  level: INFO

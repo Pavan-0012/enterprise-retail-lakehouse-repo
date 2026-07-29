@@ -1,0 +1,12 @@
+spark:
+  app_name: EnterpriseRetailLakehouse
+
+  master: local[*]
+
+  driver_memory: 4g
+
+  executor_memory: 4g
+
+  shuffle_partitions: 4
+
+  timezone: UTC
