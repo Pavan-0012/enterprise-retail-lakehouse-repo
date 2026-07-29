@@ -2,22 +2,18 @@ project:
   name: enterprise-retail-lakehouse
   environment: local
 
-storage:
-  provider: minio
+bucket:
+  name: enterprise-retail-lakehouse
 
 minio:
   endpoint: localhost:9000
   access_key: admin
   secret_key: password123
   secure: false
-  bucket: enterprise-retail-lakehouse
-
-spark:
-  app_name: Enterprise Retail Lakehouse
-
-logging:
-  level: INFO
 
 paths:
   raw: data/raw
   temp: data/temp
+
+logging:
+  level: INFO
