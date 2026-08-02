@@ -1,8 +1,14 @@
-bucket:
-  name: enterprise-retail-lakehouse
-
 minio:
-  endpoint: localhost:9000
+
+  endpoint: http://localhost:9000
+
   access_key: admin
+
   secret_key: password123
-  secure: false
+
+  buckets:
+
+    raw: raw
+    bronze: bronze
+    silver: silver
+    gold: gold

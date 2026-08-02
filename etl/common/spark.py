@@ -3,45 +3,29 @@ from pyspark.sql import SparkSession
 from etl.common.config import Config
 from etl.common.constants import CONFIG_PATH
 
+config = Config(CONFIG_PATH)
 
-class SparkSessionFactory:
-    """
-    Factory for creating configured Spark sessions.
-    """
 
-    @staticmethod
-    def create():
+def get_spark_session():
 
-        config = Config(CONFIG_PATH)
+    spark_cfg = config.section("spark")
 
-        spark = (
-            SparkSession.builder
-            .appName(config.get("spark", "app_name"))
-            .master(config.get("spark", "master"))
+    builder = (
+        SparkSession.builder
+        .appName(spark_cfg["app_name"])
+        .master(spark_cfg["master"])
+    )
 
-            .config(
-                "spark.driver.memory",
-                config.get("spark", "driver_memory")
-            )
+    packages = ",".join(spark_cfg["packages"])
 
-            .config(
-                "spark.executor.memory",
-                config.get("spark", "executor_memory")
-            )
+    builder = builder.config(
+        "spark.jars.packages",
+        packages
+    )
 
-            .config(
-                "spark.sql.shuffle.partitions",
-                config.get("spark", "shuffle_partitions")
-            )
+    for key, value in spark_cfg["configs"].items():
+        builder = builder.config(key, value)
 
-            .config(
-                "spark.sql.session.timeZone",
-                config.get("spark", "timezone")
-            )
+    spark = builder.getOrCreate()
 
-            .getOrCreate()
-        )
-
-        spark.sparkContext.setLogLevel("WARN")
-
-        return spark
+    return spark

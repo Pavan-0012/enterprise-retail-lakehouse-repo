@@ -3,8 +3,10 @@ version: "3.9"
 services:
 
   minio:
-    image: minio/minio
+    image: minio/minio:latest
     container_name: enterprise-minio
+
+    restart: unless-stopped
 
     ports:
       - "9000:9000"
@@ -37,7 +39,5 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
 volumes:
-
   minio_data:
-
   postgres_data:
