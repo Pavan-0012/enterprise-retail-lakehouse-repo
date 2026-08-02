@@ -3,7 +3,7 @@ from etl.ingestion.common.writer import RawWriter
 from etl.ingestion.postgres.reader import PostgresReader
 from etl.common.metadata.timer import PipelineTimer
 from etl.common.metadata.ingestion_metadata import IngestionMetadata
-from etl.ingestion.metadata import timer
+from etl.common.metadata import timer
 
 
 def main():
