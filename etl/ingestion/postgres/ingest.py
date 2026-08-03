@@ -1,15 +1,12 @@
+from etl.common.metadata.ingestion_metadata import IngestionMetadata
+from etl.common.metadata.timer import PipelineTimer
+from etl.common.source_config import SourceConfig
 from etl.ingestion.common.spark import get_spark_session
 from etl.ingestion.common.writer import RawWriter
 from etl.ingestion.postgres.reader import PostgresReader
-from etl.common.metadata.timer import PipelineTimer
-from etl.common.metadata.ingestion_metadata import IngestionMetadata
-from etl.common.metadata import timer
 
 
 def main():
-    timer = PipelineTimer()
-
-    timer.start_timer()
 
     spark = get_spark_session()
 
@@ -17,41 +14,35 @@ def main():
 
     writer = RawWriter()
 
-    df = reader.read("customers")
+    config = SourceConfig()
 
-    df.printSchema()
+    for table in config.postgres_tables():
 
-    df.show(5, truncate=False)
+        if not table["enabled"]:
+            continue
 
-    print("Output Path:", "data/raw/postgres/customers")
-    print("fs.defaultFS =", spark.sparkContext._jsc.hadoopConfiguration().get("fs.defaultFS"))
+        timer = PipelineTimer()
 
-    writer.write(
-    df=df,
-    layer="raw",
-    source="postgres",
-    table="customers"
-    )
+        timer.start_timer()
 
-    execution_time = timer.stop_timer()
+        df = reader.read(table["source_table"])
 
-    metadata = IngestionMetadata.build(
-        df=df,
-        layer="raw",
-        source="postgres",
-        table="customers",
-        execution_time=execution_time
-    )
+        writer.write(
+            df=df,
+            layer="raw",
+            source="postgres",
+            table=table["target_table"]
+        )
 
-    print("\n")
-    print("=" * 70)
-    print("INGESTION METADATA")
-    print("=" * 70)
+        metadata = IngestionMetadata.build(
+            df=df,
+            layer="raw",
+            source="postgres",
+            table=table["target_table"],
+            execution_time=timer.stop_timer()
+        )
 
-    for key, value in metadata.items():
-        print(f"{key:<25}: {value}")
-
-    print("=" * 70)
+        print(metadata)
 
     spark.stop()
 

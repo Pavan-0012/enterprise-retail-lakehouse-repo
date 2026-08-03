@@ -1,0 +1,63 @@
+{
+  "postgres": {
+    "schema": "commerce",
+    "tables": [
+      {
+        "enabled": true,
+        "source_table": "customers",
+        "target_table": "customers",
+        "load_type": "full"
+      },
+      {
+        "enabled": true,
+        "source_table": "orders",
+        "target_table": "orders",
+        "load_type": "full"
+      },
+      {
+        "enabled": true,
+        "source_table": "order_items",
+        "target_table": "order_items",
+        "load_type": "full"
+      },
+      {
+        "enabled": true,
+        "source_table": "payments",
+        "target_table": "payments",
+        "load_type": "full"
+      },
+      {
+        "enabled": true,
+        "source_table": "products",
+        "target_table": "products",
+        "load_type": "full"
+      },
+      {
+        "enabled": true,
+        "source_table": "sellers",
+        "target_table": "sellers",
+        "load_type": "full"
+      }
+    ]
+  },
+
+  "api": {
+    "endpoints": [
+      {
+        "enabled": true,
+        "name": "reviews",
+        "target_table": "reviews"
+      }
+    ]
+  },
+
+  "files": {
+    "datasets": [
+      {
+        "enabled": true,
+        "file": "olist_geolocation_dataset.csv",
+        "target_table": "geolocation"
+      }
+    ]
+  }
+}

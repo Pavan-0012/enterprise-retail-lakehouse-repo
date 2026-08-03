@@ -2,6 +2,8 @@ from pathlib import Path
 
 from etl.common.metadata.ingestion_metadata import IngestionMetadata
 from etl.common.metadata.timer import PipelineTimer
+from etl.common.source_config import SourceConfig
+
 from etl.ingestion.common.spark import get_spark_session
 from etl.ingestion.common.writer import RawWriter
 from etl.ingestion.files.reader import FileReader
@@ -9,41 +11,56 @@ from etl.ingestion.files.reader import FileReader
 
 def main():
 
-    timer = PipelineTimer()
-
-    timer.start_timer()
-
     spark = get_spark_session()
 
     reader = FileReader(spark)
 
     writer = RawWriter()
 
+    config = SourceConfig()
+
     latest_folder = max(
-        (Path("data/raw/olist")).iterdir(),
+        Path("data/raw/olist").iterdir(),
         key=lambda folder: folder.name
     )
 
-    csv_file = latest_folder / "olist_geolocation_dataset.csv"
+    for dataset in config.file_datasets():
 
-    df = reader.read(str(csv_file))
+        if not dataset["enabled"]:
+            continue
 
-    writer.write(
-        df=df,
-        layer="raw",
-        source="files",
-        table="geolocation"
-    )
+        timer = PipelineTimer()
+        timer.start_timer()
 
-    metadata = IngestionMetadata.build(
-        df=df,
-        layer="raw",
-        source="files",
-        table="geolocation",
-        execution_time=timer.stop_timer()
-    )
+        csv_file = latest_folder / dataset["file"]
 
-    print(metadata)
+        print(f"\nIngesting File : {csv_file.name}")
+
+        df = reader.read(str(csv_file))
+
+        writer.write(
+            df=df,
+            layer="raw",
+            source="files",
+            table=dataset["target_table"]
+        )
+
+        metadata = IngestionMetadata.build(
+            df=df,
+            layer="raw",
+            source="files",
+            table=dataset["target_table"],
+            execution_time=timer.stop_timer()
+        )
+
+        print("=" * 70)
+        print("INGESTION METADATA")
+        print("=" * 70)
+
+        for key, value in metadata.items():
+            print(f"{key:<25}: {value}")
+
+        print("=" * 70)
 
     spark.stop()
 
