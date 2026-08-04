@@ -4,8 +4,8 @@ from etl.common.metadata.ingestion_metadata import IngestionMetadata
 from etl.common.metadata.timer import PipelineTimer
 from etl.common.source_config import SourceConfig
 
-from etl.ingestion.common.spark import get_spark_session
-from etl.ingestion.common.writer import RawWriter
+from etl.common.spark import get_spark_session
+from etl.common.storage.writer import StorageWriter
 from etl.ingestion.files.reader import FileReader
 
 
@@ -15,7 +15,7 @@ def main():
 
     reader = FileReader(spark)
 
-    writer = RawWriter()
+    writer = StorageWriter()
 
     config = SourceConfig()
 

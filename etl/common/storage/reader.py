@@ -1,41 +1,38 @@
 from pyspark.sql import DataFrame
+from pyspark.sql import SparkSession
 
 from etl.common.config import Config
 from etl.common.constants import CONFIG_PATH
 
-
 config = Config(CONFIG_PATH)
 
 
-class RawWriter:
+class StorageReader:
 
-    def __init__(self):
+    def __init__(self, spark: SparkSession):
+
+        self.spark = spark
 
         self.minio = config.section("minio")
 
-    def write(
+    def read(
         self,
-        df: DataFrame,
         layer: str,
         source: str,
-        table: str,
-        mode: str = "overwrite"
-    ):
+        table: str
+    ) -> DataFrame:
 
         bucket = self.minio["buckets"][layer]
 
-        output_path = f"s3a://{bucket}/{source}/{table}"
-
-        (
-            df.write
-            .mode(mode)
-            .parquet(output_path)
-        )
+        input_path = f"s3a://{bucket}/{source}/{table}"
 
         print("=" * 70)
-        print("Write Successful")
+        print("READING DATASET")
+        print("=" * 70)
         print(f"Layer  : {layer}")
         print(f"Source : {source}")
         print(f"Table  : {table}")
-        print(f"Path   : {output_path}")
+        print(f"Path   : {input_path}")
         print("=" * 70)
+
+        return self.spark.read.parquet(input_path)
