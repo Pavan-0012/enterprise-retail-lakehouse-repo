@@ -1,0 +1,116 @@
+{
+  "datasets": [
+    {
+      "enabled": true,
+      "source": "postgres",
+      "bronze_table": "customers",
+      "silver_table": "customers",
+      "primary_keys": ["customer_id"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "postgres",
+      "bronze_table": "orders",
+      "silver_table": "orders",
+      "primary_keys": ["order_id"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "postgres",
+      "bronze_table": "order_items",
+      "silver_table": "order_items",
+      "primary_keys": ["order_id","order_item_id"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "postgres",
+      "bronze_table": "payments",
+      "silver_table": "payments",
+      "primary_keys": ["order_id","payment_sequential"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "postgres",
+      "bronze_table": "products",
+      "silver_table": "products",
+      "primary_keys": ["product_id"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "postgres",
+      "bronze_table": "sellers",
+      "silver_table": "sellers",
+      "primary_keys": ["seller_id"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "api",
+      "bronze_table": "reviews",
+      "silver_table": "reviews",
+      "primary_keys": ["review_id"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    },
+    {
+      "enabled": true,
+      "source": "files",
+      "bronze_table": "geolocation",
+      "silver_table": "geolocation",
+      "primary_keys": ["geolocation_zip_code_prefix"],
+      "write_mode": "overwrite",
+      "audit_columns": true,
+      "cleaning": {
+        "trim_strings": true,
+        "drop_duplicates": true,
+        "drop_null_primary_keys": true
+      }
+    }
+  ]
+}
