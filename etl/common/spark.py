@@ -23,7 +23,7 @@ def get_spark_session() -> SparkSession:
         "spark.jars.packages",
         packages
     )
-
+    
     for key, value in spark_cfg["configs"].items():
         builder = builder.config(key, value)
 

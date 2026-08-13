@@ -26,7 +26,7 @@ class IngestionMetadata:
 
             "ingestion_time": datetime.utcnow().isoformat(),
 
-            "execution_time_seconds": execution_time,
+            "execution_time": execution_time,
 
             "status": "SUCCESS"
         }

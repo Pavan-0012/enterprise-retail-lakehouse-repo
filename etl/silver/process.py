@@ -22,7 +22,7 @@ def main():
 
     validator = SilverValidator()
 
-    writer = IcebergWriter()
+    writer = IcebergWriter(spark)
 
     logger = SilverLogger()
 
@@ -60,7 +60,7 @@ def main():
 
             writer.write(
                 df=df,
-                table=dataset["silver_table"]
+                dataset=dataset
             )
 
             metadata = IngestionMetadata.build(
